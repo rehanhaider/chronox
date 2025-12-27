@@ -3,7 +3,7 @@ from PyInstaller.utils.hooks import collect_all
 
 datas = []
 binaries = []
-hiddenimports = ['tui', 'tui.tui']
+hiddenimports = ['tui', 'tui.tui', 'tui.stopwatch', 'tui.countdown']
 tmp_ret = collect_all('textual')
 datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
 

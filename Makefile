@@ -3,14 +3,17 @@ local:
 	@uv pip install -e .
 	@echo "Done."
 
-global:
+global: build
 	@echo "Installing timer system-wide..."
 	@sudo cp dist/timer /usr/local/bin/timer
 	@echo "Done. You can now run 'timer' from anywhere."
 
-build:
+bump:
+	@./scripts/bump.sh
+
+build: bump
 	@echo "Building standalone executable..."
-	@uv run pyinstaller --onefile --name timer src/app.py --collect-all textual --hidden-import=tui --hidden-import=tui.tui
+	@uv run pyinstaller --onefile --name timer src/app.py --collect-all textual --hidden-import=tui --hidden-import=tui.tui --hidden-import=tui.stopwatch --hidden-import=tui.countdown
 	@echo "Done. Executable is at dist/timer"
 
 clean:
@@ -22,4 +25,4 @@ uninstall:
 	-@sudo rm /usr/local/bin/timer
 	@echo "Done."
 
-.PHONY: local global build clean uninstall
+.PHONY: local global build bump clean uninstall
