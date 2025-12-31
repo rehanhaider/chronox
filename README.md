@@ -1,9 +1,12 @@
-# Timer CLI
+# Chronox
 
 A powerful and visually stunning terminal-based timer application built with [Textual](https://textual.textualize.io/) and [Typer](https://typer.tiangolo.com/).
 
 - **TUI Interface**: Beautiful, responsive terminal user interface with a premium feel.
+- **CLI Interface**: Lightweight mode (no Textual UI) via `--cli`.
 - **Notifications**: Visual and audio feedback (bell) when a countdown completes.
+
+![Stopwatch TUI Screenshot](./docs/stopwatch-tui.png)
 
 ## Features
 
@@ -12,42 +15,50 @@ A powerful and visually stunning terminal-based timer application built with [Te
 
 ## Installation
 
-### Prerequisites
+- Requires **Python 3.13+**
+- Installs two commands: `clk` (recommended) and `chronox`
 
-- [uv](https://github.com/astral-sh/uv) installed on your system.
-
-### Global Installation (Recommended)
-
-To install `timer` as a system-wide utility:
+From PyPI:
 
 ```bash
-make global
+pip install chronox
 ```
 
-This builds a standalone executable and copies it to `/usr/local/bin/timer`, making it available from anywhere.
-
-### Local Development
-
-To install in editable mode for development:
+If you use uv:
 
 ```bash
-make local
+uv tool install chronox
+
+# or (inside a project)
+uv add chronox
 ```
 
 ## Usage
+
+Chronox provides two command names for convenience:
+
+- `clk` - Short and convenient alias
+- `chronox` - Full command name
+
+Both commands work identically. Examples:
+
+```bash
+clk sw         # or: chronox sw
+clk cd 5 m     # or: chronox cd 5 m
+```
 
 ### Stopwatch
 
 Start a stopwatch to track elapsed time:
 
 ```bash
-termclock sw
+clk sw
 ```
 
-For CLI mode (non-interactive):
+For CLI mode (no Textual UI):
 
 ```bash
-termclock sw --cli
+clk sw --cli
 ```
 
 **Controls (TUI mode):**
@@ -60,15 +71,15 @@ termclock sw --cli
 Start a countdown for a specific duration:
 
 ```bash
-termclock cd 5 m    # 5 minutes
-termclock cd 60 s   # 60 seconds
-termclock cd 1 h    # 1 hour
+clk cd 5 m    # 5 minutes
+clk cd 60 s   # 60 seconds
+clk cd 1 h    # 1 hour
 ```
 
-For CLI mode (non-interactive):
+For CLI mode (no Textual UI):
 
 ```bash
-termclock cd 5 m --cli
+clk cd 5 m --cli
 ```
 
 **Controls (TUI mode):**
@@ -76,6 +87,29 @@ termclock cd 5 m --cli
 - `q`: Quit
 
 ## Development
+
+### Prerequisites
+
+- [uv](https://github.com/astral-sh/uv) installed on your system.
+- Python 3.13+
+
+### Installation for Development
+
+To install in editable mode for development:
+
+```bash
+make local
+```
+
+### Global Installation (Recommended for Testing)
+
+To install as a system-wide utility:
+
+```bash
+make global
+```
+
+This builds a standalone executable and copies it to `/usr/local/bin/termclock`, and also creates a `/usr/local/bin/clk` symlink.
 
 ### Make Commands
 
@@ -93,7 +127,7 @@ termclock cd 5 m --cli
 ### Project Structure
 
 ```
-timer/
+chronox/
 ├── src/
 │   ├── app.py              # CLI entry point using Typer
 │   ├── cli/
@@ -101,7 +135,7 @@ timer/
 │   │   └── cli.py          # CLI implementations for timers
 │   ├── core/
 │   │   ├── formatting.py   # Time formatting utilities
-│   │   └── timer.py        # Core timer logic
+│   │   └── termclock.py    # Core timer logic
 │   └── tui/
 │       ├── __init__.py     # TUI package exports
 │       ├── countdown.py    # Countdown TUI
@@ -110,14 +144,36 @@ timer/
 ├── scripts/
 │   └── bump.sh             # Version bump script
 ├── pyproject.toml          # Project configuration
-├── timer.spec              # PyInstaller specification
+├── termclock.spec          # PyInstaller specification
 ├── uv.lock                 # Dependency lock file
 ├── Makefile                # Build and install commands
 ├── LICENSE                 # Project license
 └── README.md               # This file
 ```
 
-## Uninstallation
+### Publishing to PyPI
+
+#### Test PyPI
+
+To publish to Test PyPI:
+
+```bash
+make build
+uv build
+uv publish --index testpypi
+```
+
+#### Production PyPI
+
+To publish to production PyPI:
+
+```bash
+make build
+uv build
+uv publish
+```
+
+### Uninstallation
 
 To remove the global installation:
 
