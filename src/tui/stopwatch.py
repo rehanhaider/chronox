@@ -4,7 +4,6 @@ from textual.widgets import Header, Footer, Digits, Button, Static
 from textual.reactive import reactive
 from core.formatting import format_time
 from core.timer import Stopwatch
-from tui.theme import TIMER_CSS, MUTED, SECONDARY
 
 
 class StopwatchTui(App):
@@ -13,7 +12,7 @@ class StopwatchTui(App):
     TITLE = "Timer"
     SUB_TITLE = "Stopwatch"
 
-    CSS = TIMER_CSS
+    CSS_PATH = "theme.tcss"
 
     BINDINGS = [
         ("q", "quit", "Quit"),
@@ -32,7 +31,7 @@ class StopwatchTui(App):
         with Container(id="content"):
             with Container(id="display-container"):
                 yield Digits("00:00.00", id="time-display")
-                yield Static("Ready", id="status")
+                yield Static("Ready", id="status", classes="ready")
             with Container(id="buttons"):
                 # Don't use `variant=` here; we want fully deterministic styling via TCSS.
                 yield Button("START", id="start", classes="start")
@@ -85,4 +84,6 @@ class StopwatchTui(App):
         )
         status_widget = self.query_one("#status", Static)
         status_widget.update(status)
-        status_widget.styles.color = SECONDARY if running else MUTED
+        status_widget.set_class(running, "running")
+        status_widget.set_class((not running) and self.time_elapsed == 0, "ready")
+        status_widget.set_class((not running) and self.time_elapsed > 0, "paused")

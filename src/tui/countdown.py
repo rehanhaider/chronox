@@ -4,7 +4,6 @@ from textual.widgets import Digits, Footer, Header, Static
 from textual.reactive import reactive
 from core.formatting import format_time
 from core.timer import Countdown
-from tui.theme import TIMER_CSS, DANGER, MUTED, SECONDARY
 
 
 class CountdownTui(App):
@@ -13,7 +12,7 @@ class CountdownTui(App):
     TITLE = "Timer"
     SUB_TITLE = "Countdown"
 
-    CSS = TIMER_CSS
+    CSS_PATH = "theme.tcss"
 
     BINDINGS = [
         ("q", "quit", "Quit"),
@@ -32,7 +31,7 @@ class CountdownTui(App):
         with Container(id="content"):
             with Container(id="display-container"):
                 yield Digits("00:00", id="countdown")
-                yield Static("Running", id="status")
+                yield Static("Running", id="status", classes="running")
         yield Footer()
 
     def on_mount(self) -> None:
@@ -50,7 +49,7 @@ class CountdownTui(App):
             self.notify("Time's up!", severity="error", timeout=10)
             self.bell()
             self.query_one("#status", Static).update("Time's Up!")
-            self.query_one("#status", Static).styles.color = DANGER
+            self.query_one("#status", Static).set_class(True, "danger")
 
         self.update_display()
         self._sync_status()
@@ -61,12 +60,12 @@ class CountdownTui(App):
         digits.update(time_str)
 
         # Subtle urgency cue while still respecting the palette.
-        if not self.countdown.is_running and not self.countdown.is_finished:
-            digits.styles.color = MUTED
-        elif self.countdown.is_finished or self.time_left < 10:
-            digits.styles.color = DANGER
-        else:
-            digits.styles.color = SECONDARY
+        is_finished = self.countdown.is_finished
+        is_paused = (not self.countdown.is_running) and (not is_finished)
+        is_urgent = (not is_paused) and (is_finished or self.time_left < 10)
+
+        digits.set_class(is_paused, "muted")
+        digits.set_class(is_urgent, "danger")
 
     def action_toggle_pause(self) -> None:
         self.countdown.toggle()
@@ -75,14 +74,18 @@ class CountdownTui(App):
     def _sync_status(self) -> None:
         status_widget = self.query_one("#status", Static)
 
-        if self.countdown.is_finished:
+        is_finished = self.countdown.is_finished
+        if is_finished:
             status_widget.update("Time's Up!")
-            status_widget.styles.color = DANGER
+            status_widget.set_class(True, "danger")
+            status_widget.set_class(False, "running", "paused")
             return
 
         if self.countdown.is_running:
             status_widget.update("Running")
-            status_widget.styles.color = SECONDARY
+            status_widget.set_class(True, "running")
+            status_widget.set_class(False, "paused", "danger")
         else:
             status_widget.update("Paused")
-            status_widget.styles.color = MUTED
+            status_widget.set_class(True, "paused")
+            status_widget.set_class(False, "running", "danger")

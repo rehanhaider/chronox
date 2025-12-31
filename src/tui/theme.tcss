@@ -1,0 +1,180 @@
+/* Shared Textual theme for timer TUIs
+ *
+ * Primary:   #081e32
+ * Secondary: #d5b77c
+ *
+ * Note: Textual TCSS doesn't support `linear-gradient(...)` or `box-shadow`,
+ * so the "glass" / glow effect is approximated with alpha backgrounds + outline.
+ */
+
+Screen {
+    background: #081e32;
+    color: #d5b77c;
+}
+
+Header {
+    background: transparent;
+    color: #d5b77c;
+}
+
+Footer {
+    background: transparent;
+    color: #d5b77c 60%;
+}
+
+/* Footer "keycaps" */
+FooterLabel {
+    background: transparent;
+    color: #d5b77c 60%;
+}
+
+.footer-key--key {
+    background: #d5b77c 10%;
+    color: #d5b77c;
+    padding: 0 1;
+    text-style: bold;
+}
+
+.footer-key--description {
+    background: transparent;
+    color: #d5b77c 60%;
+}
+
+/* Main content area */
+#content {
+    height: 1fr;
+    width: 100%;
+    align: center middle;
+    padding: 1 2;
+}
+
+/* Center “card” */
+#display-container {
+    background: #d5b77c 5%;
+    border: round #d5b77c;
+    outline: round #d5b77c 20%;
+    padding: 3 10;
+    margin: 1 0 2 0;
+    width: auto;
+    height: auto;
+    min-width: 58;
+    box-sizing: border-box;
+}
+
+#display-container:hover {
+    outline: round #d5b77c 30%;
+    offset: 0 -1;
+}
+
+Digits {
+    color: #d5b77c;
+    text-opacity: 100%;
+    width: auto;
+    content-align: center middle;
+}
+
+Digits.muted {
+    text-opacity: 70%;
+}
+
+Digits.danger {
+    color: #8b3a3a;
+    text-opacity: 100%;
+}
+
+#status {
+    margin-top: 1;
+    text-style: italic;
+    text-opacity: 70%;
+    color: #d5b77c;
+    content-align: center middle;
+}
+
+#status.running {
+    text-opacity: 100%;
+}
+
+#status.paused,
+#status.ready {
+    text-opacity: 70%;
+}
+
+#status.danger {
+    color: #8b3a3a;
+    text-opacity: 100%;
+}
+
+/* Buttons (stopwatch only) */
+#buttons {
+    layout: horizontal;
+    height: auto;
+    width: auto;
+    align: center middle;
+    margin-top: 1;
+}
+
+Button {
+    background: #d5b77c 15%;
+    color: #d5b77c;
+    border: round #d5b77c;
+    min-width: 16;
+    height: 3;
+    padding: 0 4;
+    margin: 0 2;
+}
+
+Button:hover {
+    offset: 0 -1;
+}
+
+Button:disabled {
+    /* Avoid full-widget opacity: terminals blend alpha differently which can make disabled
+       buttons appear to "disappear" in some emulators. */
+    opacity: 100%;
+    background: #d5b77c 8%;
+    color: #d5b77c 45%;
+    border: round #d5b77c 35%;
+}
+
+Button:disabled:hover {
+    offset: 0 0;
+}
+
+Button.start {
+    background: #d5b77c;
+    color: #081e32;
+    border: round #d5b77c;
+    text-style: bold;
+}
+
+Button.start:hover {
+    background: #e5c78c;
+}
+
+Button.stop {
+    background: #8b3a3a;
+    color: #fffaf0;
+    border: round #8b3a3a;
+    text-style: bold;
+}
+
+Button.stop:hover {
+    background: #a04545;
+}
+
+Button.stop:disabled {
+    background: #8b3a3a 25%;
+    color: #fffaf0 55%;
+    border: round #8b3a3a 45%;
+}
+
+Button.reset {
+    background: #d5b77c 15%;
+    color: #d5b77c;
+    border: round #d5b77c;
+    text-style: bold;
+}
+
+Button.reset:hover {
+    background: #d5b77c 25%;
+}
