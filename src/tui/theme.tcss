@@ -5,6 +5,10 @@
  *
  * Note: Textual TCSS doesn't support `linear-gradient(...)` or `box-shadow`,
  * so the "glass" / glow effect is approximated with alpha backgrounds + outline.
+ *
+ * Linter note: Properties like `text-style`, `text-opacity`, `content-align`,
+ * `layout`, and `align` are valid Textual TCSS extensions, not standard CSS.
+ * These warnings can be safely ignored.
  */
 
 Screen {
@@ -53,6 +57,7 @@ FooterLabel {
     background: #d5b77c 5%;
     border: round #d5b77c;
     outline: round #d5b77c 20%;
+    align: center middle;
     padding: 3 10;
     margin: 1 0 2 0;
     width: auto;
@@ -61,16 +66,19 @@ FooterLabel {
     box-sizing: border-box;
 }
 
-#display-container:hover {
-    outline: round #d5b77c 30%;
-    offset: 0 -1;
-}
 
 Digits {
     color: #d5b77c;
     text-opacity: 100%;
-    width: auto;
+    width: 100%;
     content-align: center middle;
+    text-align: center;
+}
+
+#time-display {
+    width: 100%;
+    content-align: center middle;
+    text-align: center;
 }
 
 Digits.muted {
@@ -121,10 +129,6 @@ Button {
     height: 3;
     padding: 0 4;
     margin: 0 2;
-}
-
-Button:hover {
-    offset: 0 -1;
 }
 
 Button:disabled {
