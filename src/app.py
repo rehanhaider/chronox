@@ -51,15 +51,21 @@ app = typer.Typer(
         "A terminal based stopwatch and countdown timer.\n\n"
         "Examples:\n"
         "  tm sw\n"
-        "  tm sw --cli\n"
+        "  tm sw -i\n"
         "  tm cd 5 m\n"
+        "  tm cd 5 m -i\n"
         "  tm countdown 10 s\n"
     ),
     cls=_TmGroup,
     add_completion=False,
 )
 
-CLI_MODE = typer.Option(False, "--cli", help="Run in CLI mode instead of TUI.")
+INTERACTIVE = typer.Option(
+    False,
+    "--interactive",
+    "-i",
+    help="Run in interactive (Textual TUI) mode.",
+)
 
 _UNIT_SECONDS: dict[str, int] = {
     # seconds
@@ -127,12 +133,12 @@ def _print_error_box(message: str) -> None:
 
 
 @app.callback(invoke_without_command=True)
-def _root(ctx: typer.Context, cli: bool = CLI_MODE) -> None:
+def _root(ctx: typer.Context, interactive: bool = INTERACTIVE) -> None:
     """
     A terminal based stopwatch and countdown timer.
     """
     ctx.ensure_object(dict)
-    ctx.obj["cli"] = cli
+    ctx.obj["interactive"] = interactive
 
     if ctx.invoked_subcommand is not None:
         return
@@ -146,20 +152,22 @@ def _root(ctx: typer.Context, cli: bool = CLI_MODE) -> None:
 
 
 @app.command(help="Start a stopwatch. (alias: stopwatch)")
-def sw(ctx: typer.Context, cli: bool = CLI_MODE) -> None:
+def sw(ctx: typer.Context, interactive: bool = INTERACTIVE) -> None:
     """
     Start a stopwatch.
 
     Examples:
     tm sw
-    tm sw --cli
+    tm sw -i
     tm stopwatch
     """
-    effective_cli = bool(cli or (ctx.obj or {}).get("cli", False))
-    if effective_cli:
-        run_stopwatch_cli()
-    else:
+    effective_interactive = bool(
+        interactive or (ctx.obj or {}).get("interactive", False)
+    )
+    if effective_interactive:
         StopwatchTui().run()
+    else:
+        run_stopwatch_cli()
 
 
 @app.command(help="Start a countdown timer. (alias: countdown)")
@@ -169,24 +177,26 @@ def cd(
     unit: str = typer.Argument(
         "m", help="The unit of time. [s]econds, [m]inutes, [h]ours."
     ),
-    cli: bool = CLI_MODE,
+    interactive: bool = INTERACTIVE,
 ):
     """
     Start a countdown timer.
 
     Examples:
     tm cd 5 m
-    tm cd 60 s --cli
+    tm cd 5 m -i
     tm countdown 10 s
     """
 
     seconds = _parse_countdown_seconds(amount, unit)
 
-    effective_cli = bool(cli or (ctx.obj or {}).get("cli", False))
-    if effective_cli:
-        run_countdown_cli(seconds)
-    else:
+    effective_interactive = bool(
+        interactive or (ctx.obj or {}).get("interactive", False)
+    )
+    if effective_interactive:
         CountdownTui(seconds).run()
+    else:
+        run_countdown_cli(seconds)
 
 
 def main() -> None:

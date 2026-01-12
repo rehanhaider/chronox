@@ -2,8 +2,8 @@
 
 A powerful and visually stunning terminal-based timer application built with [Textual](https://textual.textualize.io/) and [Typer](https://typer.tiangolo.com/).
 
-- **TUI Interface**: Beautiful, responsive terminal user interface with a premium feel.
-- **CLI Interface**: Lightweight mode (no Textual UI) via `--cli`.
+- **CLI Interface (default)**: Lightweight mode (no Textual UI).
+- **TUI Interface**: Beautiful, responsive terminal user interface via `-i/--interactive`.
 - **Notifications**: Visual and audio feedback (bell) when a countdown completes.
 
 ![Stopwatch TUI Screenshot](./docs/stopwatch-tui.png)
@@ -55,10 +55,10 @@ Start a stopwatch to track elapsed time:
 tm sw
 ```
 
-For CLI mode (no Textual UI):
+For interactive TUI mode:
 
 ```bash
-tm sw --cli
+tm sw -i
 ```
 
 **Controls (TUI mode):**
@@ -76,10 +76,10 @@ tm cd 60 s   # 60 seconds
 tm cd 1 h    # 1 hour
 ```
 
-For CLI mode (no Textual UI):
+For interactive TUI mode:
 
 ```bash
-tm cd 5 m --cli
+tm cd 5 m -i
 ```
 
 **Controls (TUI mode):**
