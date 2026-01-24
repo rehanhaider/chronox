@@ -126,7 +126,7 @@ def print_stopwatch_summary(
         # Create timeline bar
         bar = "▬" * 15
         line = (
-            f"  Session #{i} {start_str} [green]{bar}[/green] {end_str}  "
+            f"  Session #{i}\t{start_str} [green]{bar}[/green] {end_str}  "
             f"[dim]{duration_str}[/dim]"
         )
         timeline_lines.append(line)

@@ -74,7 +74,7 @@ def format_stopwatch_timeline(
         
         # Create a simple timeline bar
         bar = "▬" * 15
-        line = f"  Session #{i} {start_str} {bar} {end_str}  {duration_str}"
+        line = f"  Session #{i}\t{start_str} {bar} {end_str}  {duration_str}"
         lines.append(line)
 
     return "\n".join(lines)
